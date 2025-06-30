@@ -1,0 +1,28 @@
+.h1 {
+  @apply text-5xl leading-normal font-light;
+}
+
+h2:not(.h1, .h3, .h4, .h5, .h6),
+.h2 {
+  @apply text-4xl leading-10 font-medium;
+}
+
+h3:not(.h1, .h2, .h4, .h5, .h6),
+.h3 {
+  @apply text-3xl leading-9 font-semibold;
+}
+
+h4:not(.h1, .h2, .h3, .h5, .h6),
+.h4 {
+  @apply text-2xl leading-normal font-semibold;
+}
+
+h5:not(.h1, .h2, .h3, .h4, .h6),
+.h5 {
+  @apply text-lg leading-6 font-bold;
+}
+
+h6:not(.h1, .h2, .h3, .h4, .h5),
+.h6 {
+  @apply text-sm leading-6 font-semibold;
+}

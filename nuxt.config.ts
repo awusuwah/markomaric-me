@@ -4,13 +4,16 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineNuxtConfig({
   compatibilityDate: "2025-05-15",
   devtools: { enabled: true },
+  future: {
+    compatibilityVersion: 4,
+  },
 
+  ssr: false,
   vite: {
     plugins: [tailwindcss()],
   },
 
-  srcDir: "app/",
-  css: ["~/assets/css/main.css"],
+  css: ["~/assets/css/tailwind.css"],
   modules: ["@nuxt/icon"],
 
   app: {

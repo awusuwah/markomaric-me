@@ -65,7 +65,8 @@ const handleKeyboardNavigation = (event: KeyboardEvent): void => {
     case "Enter":
       event.preventDefault();
       if (selectedIndex.value >= 0 && selectedIndex.value < filteredOptions.value.length) {
-        selectOption(filteredOptions.value[selectedIndex.value].value);
+        const option = filteredOptions.value[selectedIndex.value]?.value;
+        if (option) selectOption(option);
       }
       break;
 
@@ -120,7 +121,7 @@ const handlePopoverToggle = (event: Event): void => {
  */
 const scrollSelectedOptionIntoView = (): void => {
   if (selectedIndex.value >= 0 && optionElements.value[selectedIndex.value]) {
-    optionElements.value[selectedIndex.value].scrollIntoView({
+    optionElements.value[selectedIndex.value]?.scrollIntoView({
       behavior: "smooth",
       block: "center",
     });
@@ -167,11 +168,11 @@ const triggerWidth = computed((): string => trigger.value?.clientWidth + "px");
 const triggerClasses = computed(
   (): Record<string, boolean> => ({
     "anchor relative w-full h-14 rounded-md bg-bgr text-txt border": true,
-    "focus:outline-focus focus:outline-2 focus:outline-offset-2": true,
+    "focus:outline-foc focus:outline-2 focus:outline-offset-2": true,
+    "disabled:cursor-not-allowed disabled:opacity-50": true,
 
-    "cursor-not-allowed opacity-50": props.disabled,
     "border-dng": props.invalid,
-    "border-brd": !props.invalid,
+    "border-bor": !props.invalid,
   })
 );
 
@@ -181,7 +182,7 @@ const triggerClasses = computed(
 const popoverClasses = computed(
   (): Record<string, boolean> => ({
     "popover fixed inset-auto m-0 max-h-96": true,
-    "border border-brd bg-white rounded-md divide-y divide-brd": true,
+    "border border-bor rounded-md divide-y divide-bor": true,
   })
 );
 
@@ -201,11 +202,13 @@ const popoverStyles = computed(
  */
 const labelClasses = computed(
   (): Record<string, boolean> => ({
-    "flex items-center gap-x-1 absolute text-ellipsis text-txt-sec overflow-hidden whitespace-no-wrap select-none transition-all": true,
+    "flex items-center gap-x-1 absolute text-ellipsis overflow-hidden whitespace-no-wrap select-none transition-all": true,
     "left-4 top-2 text-sm": props.modelValue !== "" && !props.icon,
     "left-4 top-4": props.modelValue === "" && !props.icon,
     "left-0 top-2 text-sm": props.modelValue !== "" && !!props.icon,
     "left-0 top-4": props.modelValue === "" && !!props.icon,
+    "text-txt": props.modelValue === "",
+    "text-txt-muted": props.modelValue !== "",
   })
 );
 
@@ -215,9 +218,9 @@ const labelClasses = computed(
  * @param index - The index of the option which is being rendered.
  */
 const optionClasses = (index: number): Record<string, boolean> => ({
-  "flex items-center gap-2 w-full h-10 px-2 text-left text-txt hover:bg-bgr-ter transition-colors focus:outline-none": true,
-  "bg-bgr": index !== selectedIndex.value,
-  "bg-bgr-ter": index === selectedIndex.value,
+  "flex items-center gap-2 w-full h-10 px-2 text-left hover:bg-bgr-muted transition-colors focus:outline-none": true,
+  "bg-bgr-muted text-txt-muted": index !== selectedIndex.value,
+  "bg-foc text-txt": index === selectedIndex.value,
 });
 
 /**
@@ -259,7 +262,7 @@ defineExpose({
       <div class="flex h-full">
         <!-- Icon -->
         <slot name="prefix">
-          <div v-if="icon" class="grid place-items-center w-10 h-full">
+          <div v-if="icon" class="grid place-items-center w-10 h-full text-txt-muted">
             <Icon :icon="triggerIcon" size="md" />
           </div>
         </slot>
@@ -268,12 +271,12 @@ defineExpose({
         <div class="relative flex flex-1 flex-col justify-end">
           <label v-if="label" :class="labelClasses">{{ label }}</label>
           <span class="mb-1.5 text-left" :class="{ 'ml-0': !!icon, 'ml-4': !icon }">
-            {{ options?.find((option) => option.value === modelValue)?.label }}
+            {{ options?.find((option: DropdownOption) => option.value === modelValue)?.label }}
           </span>
         </div>
 
         <!-- Suffix -->
-        <div class="grid place-items-center w-10 h-full">
+        <div class="grid place-items-center w-10 h-full text-txt-muted">
           <button v-if="clearable && modelValue" class="grid place-items-center" tabindex="-1" @click.prevent="emit('update:modelValue', '')">
             <Icon icon="close-line" size="md" />
           </button>
@@ -297,13 +300,13 @@ defineExpose({
       <!-- Search field -->
       <div v-if="searchable" class="relative flex items-center gap-x-2 p-2 bg-bgr">
         <div class="relative flex items-center w-full">
-          <Icon icon="search-line" class="absolute left-3 w-5 h-5 text-txt-sec" :aria-hidden="true" />
+          <Icon icon="search-line" class="absolute left-3 w-5 h-5 text-txt-muted" :aria-hidden="true" />
           <input
             ref="search"
             v-model="searchQuery"
             type="text"
             placeholder="Search..."
-            class="border border-brd w-full rounded p-2 pl-10 text-txt placeholder-txt-ter focus:outline-focus focus:outline-offset-2 focus:outline-2"
+            class="border border-bor w-full rounded p-2 pl-10 text-txt placeholder-txt-ter focus:outline-focus focus:outline-offset-2 focus:outline-2"
             autofocus
             :aria-label="`Search ${label} options`"
           />

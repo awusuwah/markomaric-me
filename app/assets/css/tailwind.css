@@ -1,0 +1,48 @@
+@import "tailwindcss";
+@import "./global.css";
+
+@theme {
+  /* Base colors */
+  --color-bgr: oklch(0.21 0.01 270);
+  --color-bgr-muted: oklch(0.27 0.008 270);
+  --color-txt: oklch(0.95 0.01 270);
+  --color-txt-muted: oklch(0.6 0.01 270);
+  --color-bor: oklch(0.35 0.008 270);
+  --color-inp: oklch(0.26 0.01 270);
+  --color-foc: oklch(0.5 0.1 270);
+
+  --color-pri: oklch(42% 0.14 250);
+  --color-pri-hover: oklch(47% 0.14 250);
+  --color-pri-active: oklch(38% 0.13 250);
+  --color-pri-contrast: oklch(96% 0.01 250);
+
+  --color-sec: oklch(58.5% 0.233 277.117);
+  --color-sec-hover: oklch(51.1% 0.262 276.966);
+  --color-sec-active: oklch(45.7% 0.24 277.023);
+  --color-sec-contrast: oklch(0.96 0.01 27);
+
+  --color-neu: oklch(0.42 0.015 270);
+  --color-neu-hover: oklch(0.47 0.015 270);
+  --color-neu-active: oklch(0.38 0.015 270);
+  --color-neu-contrast: oklch(0.96 0.01 270);
+
+  /* Destructive (red) */
+  --color-des: oklch(0.57 0.245 27.325);
+  --color-des-hover: oklch(0.52 0.26 27.325);
+  --color-des-active: oklch(0.48 0.24 27.325);
+  --color-des-contrast: oklch(0.95 0.01 27.325);
+
+  /* Accent (orange) */
+  --color-accent: oklch(0.705 0.213 47.604); /* orange-500 */
+  --color-accent-foreground: oklch(0.15 0.01 47.604);
+
+  /* Card UI */
+  --color-card: oklch(0.24 0.01 270);
+  --color-card-foreground: oklch(0.95 0.01 270);
+
+  /* Alerts/Feedback */
+  --color-suc: oklch(0.6 0.18 140);
+  --color-wrn: oklch(0.72 0.2 80);
+  --color-inf: oklch(0.65 0.19 250);
+  --color-dng: oklch(0.57 0.245 27.325);
+}
