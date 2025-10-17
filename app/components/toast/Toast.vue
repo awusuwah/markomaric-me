@@ -23,7 +23,7 @@ const toastIcon = computed((): string => {
 
 const wrapperClasses = computed(
   (): Record<string, boolean> => ({
-    "relative flex flex-row items-center gap-2 w-96 min-h-20 rounded-2xl shadow-lg p-2 overflow-hidden": true,
+    "relative flex flex-row items-center gap-2 w-96 min-h-20 rounded-2xl shadow-2xl shadow-white/5 p-2 overflow-hidden": true,
 
     // Variants
     "bg-emerald-500 text-white": props.variant === "success",
@@ -35,10 +35,10 @@ const wrapperClasses = computed(
 
 const bubbleClasses = computed(
   (): Record<string, boolean> => ({
-    "bg-emerald-700": props.variant === "success",
-    "bg-red-800": props.variant === "danger",
-    "bg-yellow-800": props.variant === "warning",
-    "bg-blue-800": props.variant === "info",
+    "bg-emerald-700 text-white": props.variant === "success",
+    "bg-red-800 text-white": props.variant === "danger",
+    "bg-yellow-800 text-white": props.variant === "warning",
+    "bg-blue-800 text-white": props.variant === "info",
   })
 );
 
@@ -55,20 +55,25 @@ interface ToastSlots {
 </script>
 
 <template>
-  <div :class="wrapperClasses">
-    <div :class="bubbleClasses" class="isolate absolute top-2 left-2 flex items-center gap-2 rounded-full p-2">
-      <Icon :icon="toastIcon" />
+  <div class="relative">
+    <div :class="wrapperClasses">
+      <div :class="bubbleClasses" class="absolute -bottom-24 -left-12 w-32 h-32 rounded-full"></div>
+      <div :class="bubbleClasses" class="absolute left-11 bottom-7 w-2 h-2 rounded-full"></div>
+      <div :class="bubbleClasses" class="absolute left-2 bottom-6 w-3 h-3 rounded-full"></div>
+      <div :class="bubbleClasses" class="absolute left-5 bottom-12 w-1 h-1 rounded-full"></div>
+      <div :class="bubbleClasses" class="absolute left-10 bottom-11 w-1 h-1 rounded-full"></div>
+      <div :class="bubbleClasses" class="absolute top-4 left-12 w-1 h-1 rounded-full"></div>
+
+      <div class="flex flex-col ml-14">
+        <slot :title="title" :message="message">
+          <h3 class="text-lg font-bold">Notification</h3>
+          <p class="text-sm">This is a notification message.</p>
+        </slot>
+      </div>
     </div>
 
-    <div :class="bubbleClasses" class="absolute -bottom-24 -left-12 w-32 h-32 rounded-full"></div>
-    <div :class="bubbleClasses" class="absolute left-11 bottom-7 w-2 h-2 rounded-full"></div>
-    <div :class="bubbleClasses" class="absolute left-10 bottom-10 w-1 h-1 rounded-full"></div>
-
-    <div class="flex flex-col ml-14">
-      <slot :title="title" :message="message">
-        <h3 class="text-lg font-bold">Notification</h3>
-        <p class="text-sm">This is a notification message.</p>
-      </slot>
+    <div :class="bubbleClasses" class="absolute -top-3 left-3 flex items-center gap-2 rounded-full p-2">
+      <Icon :icon="toastIcon" />
     </div>
   </div>
 </template>

@@ -1,0 +1,15 @@
+.Vue-Toastification__container {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.Vue-Toastification__toast--default {
+  background: none !important;
+  box-shadow: none !important;
+}
+
+.Vue-Toastification__toast-body {
+  /* Remove any padding/margin from the toast body */
+  margin: 0 !important;
+  padding: 0 !important;
+}

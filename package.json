@@ -12,14 +12,19 @@
   "dependencies": {
     "@nuxt/icon": "1.13.0",
     "@tailwindcss/vite": "^4.1.7",
+    "argon2": "^0.44.0",
+    "argon2id": "^1.0.1",
+    "jsonwebtoken": "^9.0.2",
     "nuxt": "^3.17.4",
     "tailwindcss": "^4.1.7",
     "vue": "^3.5.15",
     "vue-router": "^4.5.1",
+    "vue-toastification": "^2.0.0-rc.5",
     "zod": "^4.1.12"
   },
   "devDependencies": {
     "@iconify-json/circle-flags": "^1.2.6",
-    "@iconify-json/ri": "^1.2.5"
+    "@iconify-json/ri": "^1.2.5",
+    "@types/jsonwebtoken": "^9.0.10"
   }
 }

@@ -13,3 +13,7 @@
   --color-txt: hsl(0 0% 95%);
   --color-txt-muted: hsl(0 0% 70%);
 }
+
+html {
+  color-scheme: dark;
+}

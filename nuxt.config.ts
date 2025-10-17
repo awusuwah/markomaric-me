@@ -10,7 +10,7 @@ export default defineNuxtConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  css: ["./app/assets/main.css"],
+  css: ["./app/assets/main.css", "./app/assets/toast.css"],
   icon: {
     componentName: "NuxtIcon",
   },
@@ -21,4 +21,8 @@ export default defineNuxtConfig({
       },
     },
   },
+  runtimeConfig: {
+    authSecret: process.env.AUTH_SECRET || "",
+  },
+  nitro: { preset: "bun" },
 });

@@ -14,7 +14,6 @@ export const useApi = () => {
         success: true,
       };
     } catch (error: any) {
-      console.log("[useApi] Error: ", error.data);
       const errorMessage = error.data?.message || error.message || "An error occurred";
       error.value = errorMessage;
 

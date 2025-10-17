@@ -1,48 +1,73 @@
 <script setup lang="ts">
+import { z } from "zod";
 import Button from "@/components/button/Button.vue";
-import Toast from "@/components/toast/Toast.vue";
+import Text from "@/components/inputs/text/Text.vue";
 
+const { notify } = useToast();
 const { execute, error, loading } = useApi();
 
-const authenticateUserCorrectly = async (): Promise<void> => {
+const email = ref("");
+const password = ref("");
+
+const emailErrorMessage = ref("");
+const passwordErrorMessage = ref("");
+
+const login = async (): Promise<void> => {
+  const validated = LOGIN_SCHEMA.safeParse({ email: email.value, password: password.value });
+  if (!validated.success) {
+    const errors = validated.error.flatten().fieldErrors;
+    emailErrorMessage.value = errors.email?.[0] || "";
+    passwordErrorMessage.value = errors.password?.[0] || "";
+    console.log("Errors: ", emailErrorMessage.value, passwordErrorMessage.value);
+    return;
+  }
+
   const { data, error, success } = await execute("/api/login", {
     method: "POST",
     body: {
-      email: "marko@markomaric.me",
-      password: "1234567890",
+      email: email.value,
+      password: password.value,
     },
   });
 
-  console.log("[Login] Response: ", data, error, success);
+  if (success) {
+    notify.success("Login Success", "You have been successfully logged in.");
+  } else {
+    notify.danger("Login Failed", error as string);
+  }
 };
 
-const authenticateUserIncorrectly = async (): Promise<void> => {
-  const { data, error, success } = await execute("/api/login", {
-    method: "POST",
-    body: {
-      email: "incorrect@email.com",
-      password: "incorrectpassword",
-    },
-  });
-
-  console.log("[Login] Response: ", data, error, success);
-};
+const LOGIN_SCHEMA = z.object({
+  email: z.email({ message: "Invalid email address" }),
+  password: z.string().min(10, { message: "Too short (min 10 characters)" }),
+});
 </script>
 
 <template>
-  <div class="p-4">
-    <div class="flex flex-col gap-4">
-      <div class="flex gap-4">
-        <Button variant="brand" style-variant="solid" @click="authenticateUserCorrectly" />
-        <Button variant="brand" style-variant="outline" @click="authenticateUserIncorrectly" />
-      </div>
-    </div>
-  </div>
+  <div class="w-screen h-screen grid place-items-center">
+    <section class="w-1/3 bg-bgr-light rounded-2xl p-12 flex flex-col gap-4">
+      <Text
+        v-model="email"
+        type="email"
+        label="Email"
+        icon="mail-line"
+        placeholder="marko@markomaric.me"
+        :variant="emailErrorMessage ? 'danger' : 'default'"
+        :error-message="emailErrorMessage"
+      />
+      <Text
+        v-model="password"
+        type="password"
+        label="Password"
+        icon="lock-line"
+        placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+        :variant="passwordErrorMessage ? 'danger' : 'default'"
+        :error-message="passwordErrorMessage"
+      />
 
-  <div class="flex gap-4">
-    <Toast title="Success" message="This is a success message." variant="success" />
-    <Toast title="Danger" message="This is an error message." variant="danger" />
-    <Toast title="Warning" message="This is a warning message." variant="warning" />
-    <Toast title="Info" message="This is an info message." variant="info" />
+      <div class="flex flex-row gap-2 justify-end">
+        <Button variant="brand" style-variant="solid" label="Login" @click="login" />
+      </div>
+    </section>
   </div>
 </template>

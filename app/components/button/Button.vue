@@ -28,5 +28,5 @@ interface ButtonProps {
 </script>
 
 <template>
-  <button :class="classes">Button</button>
+  <button :class="classes">{{ label }}</button>
 </template>
