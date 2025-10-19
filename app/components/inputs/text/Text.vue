@@ -13,12 +13,13 @@ const handleInputChange = (event: any): void => {
 const wrapperClasses = computed(
   (): Record<string, boolean> => ({
     "rounded-md w-full h-14 flex flex-row p-1": true,
+    "focus-within:outline focus-within:outline-2 focus-within:outline-offset-2": true,
 
-    "bg-bgr-dark": props.variant === "default",
-    "bg-emerald-900/30": props.variant === "success",
-    "bg-red-900/30": props.variant === "danger",
-    "bg-yellow-900/30": props.variant === "warning",
-    "bg-blue-900/30": props.variant === "info",
+    "bg-bgr-dark focus-within:outline-cyan-600": props.variant === "default",
+    "bg-emerald-900/30 focus-within:outline-emerald-600": props.variant === "success",
+    "bg-red-900/30 focus-within:outline-red-600": props.variant === "danger",
+    "bg-yellow-900/30 focus-within:outline-yellow-600": props.variant === "warning",
+    "bg-blue-900/30 focus-within:outline-blue-600": props.variant === "info",
   })
 );
 
@@ -39,8 +40,8 @@ interface TextEmits {
 
 <template>
   <div :class="wrapperClasses">
-    <div class="grid place-items-center h-12 aspect-square">
-      <Icon v-if="icon" :icon="icon" class="text-3xl text-txt-muted" />
+    <div v-if="icon" class="grid place-items-center h-12 aspect-square">
+      <Icon :icon="icon" class="text-3xl text-txt-muted" />
     </div>
     <div class="flex flex-col w-full px-1 relative">
       <label class="text-txt-muted text-sm absolute top-1 left-2 flex gap-2 items-center justify-between w-full">

@@ -66,8 +66,8 @@ interface ToastSlots {
 
       <div class="flex flex-col ml-14">
         <slot :title="title" :message="message">
-          <h3 class="text-lg font-bold">Notification</h3>
-          <p class="text-sm">This is a notification message.</p>
+          <h3 class="text-lg font-bold">{{ title }}</h3>
+          <p class="text-sm">{{ message }}</p>
         </slot>
       </div>
     </div>

@@ -1,49 +1,41 @@
 <script setup lang="ts">
 import Icon from "@/components/icon/Icon.vue";
 
-const emit = defineEmits<ButtonEmits>();
-const props = withDefaults(defineProps<ButtonProps>(), {
+const emit = defineEmits<IconButtonEmits>();
+const props = withDefaults(defineProps<IconButtonProps>(), {
   modelValue: "idle",
   variant: "brand",
-  size: "md",
   noShake: false,
-  startIcon: undefined,
-  endIcon: undefined,
-  fullWidth: false,
   disabled: false,
   ghost: false,
+  circular: false,
 });
 
 const shaking = ref(false);
 
 const buttonClasses = computed(
   (): Record<string, boolean> => ({
-    "relative flex items-center justify-center rounded-md transition-colors select-none": true,
-    "focus:outline focus:outline-2 focus:outline-offset-2": true,
+    "grid place-items-center h-10 w-10 transition-colors select-none": true,
+    "focus:outline-none focus:ring-2": true,
 
-    "h-10 px-4": props.size === "md",
-    "h-14 px-8": props.size === "lg",
+    "h-10 w-10": props.size === "md",
+    "h-14 w-14": props.size === "lg",
 
-    "w-full": props.fullWidth,
     "animate-shake": shaking.value && !props.noShake,
-    "cursor-not-allowed opacity-50": props.disabled,
     "cursor-pointer": props.modelValue === "idle" && !props.disabled,
+    "cursor-not-allowed opacity-50": props.disabled,
+    "rounded-md": !props.circular,
+    "rounded-full": props.circular,
 
     // Variants
-    "focus:outline-cyan-600": props.variant === "brand" || props.variant === "link",
     "bg-cyan-700 hover:bg-cyan-600 text-white": props.variant === "brand" && !props.ghost,
     "bg-cyan-700/70 hover:bg-cyan-600/70 text-white": props.variant === "brand" && props.ghost,
 
-    "focus:outline-amber-600": props.variant === "accent",
     "bg-amber-700 hover:bg-amber-600 text-white": props.variant === "accent" && !props.ghost,
     "bg-amber-700/70 hover:bg-amber-600/70 text-white": props.variant === "accent" && props.ghost,
 
-    "focus:outline-slate-600": props.variant === "neutral",
     "bg-slate-700 hover:bg-slate-600 text-white": props.variant === "neutral" && !props.ghost,
     "bg-slate-700/70 hover:bg-slate-600/70 text-white": props.variant === "neutral" && props.ghost,
-
-    "text-gray-300 hover:text-gray-200 underline-offset-2 hover:underline": props.variant === "link" && !props.ghost,
-    "text-gray-300 hover:bg-gray-300/10": props.variant === "link" && props.ghost,
   })
 );
 
@@ -60,53 +52,38 @@ watch(
   }
 );
 
-interface ButtonProps {
+interface IconButtonProps {
   modelValue?: ButtonState;
-  variant?: "brand" | "accent" | "neutral" | "link";
-  label?: string;
+  variant?: "brand" | "accent" | "neutral";
+  icon: string;
   size?: "md" | "lg";
   noShake?: boolean;
-  startIcon?: string;
-  endIcon?: string;
-  fullWidth?: boolean;
   disabled?: boolean;
   ghost?: boolean;
+  circular?: boolean;
 }
 
-interface ButtonEmits {
+interface IconButtonEmits {
   (e: "update:modelValue", value: ButtonState): void;
 }
 </script>
 
 <template>
   <button :class="buttonClasses" :disabled="disabled || modelValue !== 'idle'">
-    <!-- Keep this element in the DOM  to make sure the button's width doesn't change when the state changes -->
-    <span class="invisible">
-      <div class="flex flex-row items-center justify-center gap-x-2">
-        <Icon v-if="startIcon" :icon="startIcon" />
-        <span>{{ label }}</span>
-        <Icon v-if="endIcon" :icon="endIcon" />
-      </div>
-    </span>
-
     <Transition name="fade-content">
-      <div v-if="modelValue === 'idle'" class="absolute flex items-center justify-center gap-x-2">
-        <Icon v-if="startIcon" :icon="startIcon" />
-        <span v-if="label" class="shrink">{{ label }}</span>
-        <Icon v-if="endIcon" :icon="endIcon" />
-      </div>
+      <Icon v-if="modelValue === 'idle'" :icon="icon" />
     </Transition>
 
     <Transition name="fade-content">
-      <Icon v-if="modelValue === 'loading'" icon="loader-4-line" size="lg" class="absolute animate-spin" />
+      <Icon v-if="modelValue === 'loading'" icon="loader-4-line" class="animate-spin" />
     </Transition>
 
     <Transition name="fade-content">
-      <Icon v-if="modelValue === 'success'" icon="check-line" class="absolute" />
+      <Icon v-if="modelValue === 'success'" icon="check-line" />
     </Transition>
 
     <Transition name="fade-content">
-      <Icon v-if="modelValue === 'error'" icon="close-line" class="absolute" />
+      <Icon v-if="modelValue === 'error'" icon="close-line" />
     </Transition>
   </button>
 </template>

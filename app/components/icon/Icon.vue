@@ -17,6 +17,7 @@ const iconName = computed(() => {
 const iconClasses = computed(() => [
   {
     "h-10 w-10": props.size === "md",
+    "h-14 w-14": props.size === "lg",
   },
   props.class,
 ]);

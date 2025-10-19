@@ -8,3 +8,7 @@ export const hashPassword = async (password: string): Promise<string> => {
     parallelism: 1, // Single thread
   });
 };
+
+export const verifyPassword = async (hash: string, password: string): Promise<boolean> => {
+  return await argon2.verify(hash, password);
+};

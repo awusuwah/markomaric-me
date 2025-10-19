@@ -26,12 +26,11 @@ export const createToken = (event: H3Event, user: DatabaseUser) => {
       typ: "JWT", // Token type - The kind of token it is (JWT, OAuth, etc.)
 
       // Public claims
-      name: user.fullname,
+      name: `${user.firstname} ${user.lastname}`,
       given_name: user.firstname,
       family_name: user.lastname,
       username: user.username,
       email: user.email,
-      email_verified: user.emailVerified,
     },
     authSecret
   );
@@ -39,7 +38,7 @@ export const createToken = (event: H3Event, user: DatabaseUser) => {
   return token;
 };
 
-export const verifyToken = (event: H3Event, token: string): DatabaseUser => {
+export const verifyToken = (event: H3Event, token: string): AuthTokenPayload => {
   const config = useRuntimeConfig(event);
   const authSecret = config.authSecret;
   if (!authSecret) {
@@ -63,41 +62,5 @@ export const verifyToken = (event: H3Event, token: string): DatabaseUser => {
     });
   }
 
-  return {
-    id: decoded.sub,
-    fullname: decoded.name,
-    firstname: decoded.given_name,
-    lastname: decoded.family_name,
-    username: decoded.username,
-    email: decoded.email,
-    emailVerified: decoded.email_verified,
-  };
+  return decoded;
 };
-
-interface DatabaseUser {
-  id: string;
-  fullname: string;
-  firstname: string;
-  lastname: string;
-  username: string;
-  email: string;
-  emailVerified: boolean;
-}
-
-interface AuthTokenPayload {
-  iss: string;
-  sub: string;
-  aud: string;
-  exp: number;
-  nbf: number;
-  iat: number;
-  jti: string;
-  typ: "JWT";
-
-  name: string;
-  given_name: string;
-  family_name: string;
-  username: string;
-  email: string;
-  email_verified: boolean;
-}
