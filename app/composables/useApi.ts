@@ -9,7 +9,7 @@ export const useApi = () => {
     try {
       const response = await $fetch<T>(url, options);
       return {
-        data: response,
+        data: response as T,
         error: null,
         success: true,
       };

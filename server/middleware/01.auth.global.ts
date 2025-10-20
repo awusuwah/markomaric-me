@@ -3,13 +3,15 @@ import { verifyToken } from "@/../server/utils/auth";
 import { prisma } from "@/../server/utils/db";
 
 const PUBLIC_ROUTES = [
-  /^\/$/, // Homepage
+  /^\/$/,
   /^\/login/,
   /^\/register/,
 
   // Public assets
   /^\/public\//,
-  /^\/api\//,
+  // /^\/api\//,
+  /^\/api\/auth\/login/,
+  /^\/api\/auth\/register/,
   /^\/_nuxt\//,
   /^\/favicon\.ico$/,
   /^\/robots\.txt$/,
@@ -29,7 +31,7 @@ export default defineEventHandler(async (event: H3Event) => {
     // For API calls, return a 401 Unauthorized error
     // For pages, redirect to the login page
     if (path.startsWith("/api/")) {
-      console.log("Unauthorized API call: ", path);
+      console.warn("[01.auth.global] Unauthorized API call: ", path);
       throw createError({ statusCode: 401, statusMessage: "Unauthorized", message: "Unauthorized" });
     }
 

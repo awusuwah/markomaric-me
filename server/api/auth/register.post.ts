@@ -38,6 +38,18 @@ export default defineEventHandler(async (event) => {
       path: "/",
       sameSite: "strict",
     });
+
+    return {
+      id: user.id,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      username: user.username,
+      email: user.email,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+      lastLoginAt: user.lastLoginAt,
+      role: user.role,
+    };
   } catch (error: any) {
     if (error.code === "P2002") {
       throw createError({ statusCode: 409, statusMessage: "Conflict", message: "Username or email already in use!" });

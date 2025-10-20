@@ -5,6 +5,7 @@ import { REGISTER_SCHEMA } from "@/schemas/auth";
 
 const { execute } = useApi();
 const { notify } = useToast();
+const { register } = useAuth();
 
 const firstname = ref("");
 const lastname = ref("");
@@ -20,7 +21,7 @@ const passwordErrorMessage = ref("");
 
 const submitState = ref<ButtonState>("idle");
 
-const register = async (): Promise<void> => {
+const registerUser = async (): Promise<void> => {
   submitState.value = "loading";
 
   const validated = REGISTER_SCHEMA.safeParse({
@@ -42,25 +43,7 @@ const register = async (): Promise<void> => {
   }
 
   // Create a new user account
-  const { data, error, success } = await execute("/api/auth/register", {
-    method: "POST",
-    body: {
-      firstname: firstname.value,
-      lastname: lastname.value,
-      username: username.value.toLowerCase(),
-      email: email.value.toLowerCase(),
-      password: password.value,
-    },
-  });
-
-  if (success) {
-    submitState.value = "success";
-    navigateTo("/dashboard");
-    notify.success("Registration Success", "You have been successfully registered.");
-  } else {
-    submitState.value = "error";
-    notify.danger("Registration Failed", error as string);
-  }
+  await register(firstname.value, lastname.value, username.value, email.value, password.value);
 };
 </script>
 
@@ -116,7 +99,7 @@ const register = async (): Promise<void> => {
 
       <div class="flex flex-row gap-2 items-center justify-end">
         <Button variant="link" label="Login" @click="navigateTo('/login')" />
-        <Button v-model="submitState" variant="brand" label="Register" @click="register" />
+        <Button v-model="submitState" variant="brand" label="Register" @click="registerUser" />
       </div>
     </section>
   </div>

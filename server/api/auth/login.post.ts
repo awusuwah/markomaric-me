@@ -22,6 +22,9 @@ export default defineEventHandler(async (event) => {
   const passwordMatches = await verifyPassword(user.passwordHash, validated.data.password);
   if (!passwordMatches) throw createError({ statusCode: 401, statusMessage: "Unauthorized", message: "Invalid credentials" });
 
+  // Update the user's last login
+  await prisma.user.update({ where: { id: user.id }, data: { lastLoginAt: new Date() } });
+
   // Set the `authtoken` cookie
   const authtoken = createToken(event, user);
   setCookie(event, "authtoken", authtoken, {
@@ -33,5 +36,15 @@ export default defineEventHandler(async (event) => {
   });
 
   // Return the user
-  return user;
+  return {
+    id: user.id,
+    firstname: user.firstname,
+    lastname: user.lastname,
+    username: user.username,
+    email: user.email,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
+    lastLoginAt: user.requiresPasswordReset,
+    role: user.role,
+  };
 });

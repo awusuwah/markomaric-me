@@ -1,4 +1,5 @@
 interface User {
+  id: string;
   firstname: string;
   lastname: string | undefined;
   username: string;

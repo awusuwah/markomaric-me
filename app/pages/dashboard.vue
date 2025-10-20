@@ -6,6 +6,7 @@ import { RESET_PASSWORD_SCHEMA } from "@/schemas/auth";
 
 const { execute } = useApi();
 const { notify } = useToast();
+const { user } = useAuth();
 
 const currentPassword = ref("");
 const newPassword = ref("");
@@ -81,6 +82,8 @@ const logout = async (): Promise<void> => {
         :variant="newPasswordErrorMessage ? 'danger' : 'default'"
         :error-message="newPasswordErrorMessage"
       />
+
+      <pre>{{ user || "No user" }}</pre>
 
       <div class="flex flex-row gap-2 items-center justify-end">
         <Button v-model="submitState" variant="brand" label="Change Password" @click="changePassword" />
