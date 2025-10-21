@@ -23,7 +23,7 @@ const toastIcon = computed((): string => {
 
 const wrapperClasses = computed(
   (): Record<string, boolean> => ({
-    "relative flex flex-row items-center gap-2 w-96 min-h-20 rounded-2xl shadow-2xl shadow-white/5 p-2 overflow-hidden": true,
+    "relative flex flex-row items-center gap-2 w-96 min-h-20 rounded-2xl p-2 overflow-hidden": true,
 
     // Variants
     "bg-emerald-500 text-white": props.variant === "success",

@@ -5,7 +5,7 @@ import { LOGIN_SCHEMA } from "@/schemas/auth";
 
 const route = useRoute();
 const { notify } = useToast();
-const { execute, error, loading } = useApi();
+const { login } = useAuth();
 
 const email = ref("");
 const password = ref("");
@@ -14,7 +14,7 @@ const passwordErrorMessage = ref("");
 
 const submitState = ref<ButtonState>("idle");
 
-const login = async (): Promise<void> => {
+const loginUser = async (): Promise<void> => {
   submitState.value = "loading";
 
   const validated = LOGIN_SCHEMA.safeParse({ email: email.value, password: password.value });
@@ -26,22 +26,14 @@ const login = async (): Promise<void> => {
     return;
   }
 
-  const { data, error, success } = await execute("/api/auth/login", {
-    method: "POST",
-    body: {
-      email: email.value,
-      password: password.value,
-    },
-  });
-
-  if (success) {
+  // Log the user in
+  const user = await login(validated.data.email, validated.data.password);
+  if (user) {
     submitState.value = "success";
-    const next = (route.query.next as string) || "/dashboard";
-    navigateTo(next);
     notify.success("Login Success", "You have been successfully logged in.");
+    navigateTo("/dashboard");
   } else {
     submitState.value = "error";
-    notify.danger("Login Failed", error as string);
   }
 };
 </script>
@@ -58,7 +50,7 @@ const login = async (): Promise<void> => {
         placeholder="marko@markomaric.me"
         :variant="emailErrorMessage ? 'danger' : 'default'"
         :error-message="emailErrorMessage"
-        @enter="login"
+        @enter="loginUser"
       />
       <Text
         v-model="password"
@@ -68,12 +60,12 @@ const login = async (): Promise<void> => {
         placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
         :variant="passwordErrorMessage ? 'danger' : 'default'"
         :error-message="passwordErrorMessage"
-        @enter="login"
+        @enter="loginUser"
       />
 
       <div class="flex flex-row gap-2 items-center justify-end">
         <Button variant="link" label="Create Account" @click="navigateTo('/register')" />
-        <Button v-model="submitState" variant="brand" label="Login" @click="login" />
+        <Button v-model="submitState" variant="brand" label="Login" @click="loginUser" />
       </div>
     </section>
   </div>

@@ -79,7 +79,6 @@ export const useAuth = () => {
     });
 
     if (success && data) {
-      console.log("Login successful: ", data);
       user.value = data;
       loading.value = false;
       return data;

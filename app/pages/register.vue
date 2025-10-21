@@ -3,7 +3,6 @@ import Button from "@/components/button/Button.vue";
 import Text from "@/components/inputs/text/Text.vue";
 import { REGISTER_SCHEMA } from "@/schemas/auth";
 
-const { execute } = useApi();
 const { notify } = useToast();
 const { register } = useAuth();
 
@@ -43,7 +42,15 @@ const registerUser = async (): Promise<void> => {
   }
 
   // Create a new user account
-  await register(firstname.value, lastname.value, username.value, email.value, password.value);
+  const user = await register(firstname.value, lastname.value, username.value, email.value, password.value);
+  if (user) {
+    submitState.value = "success";
+    navigateTo("/dashboard");
+    notify.success("Registration Success", "You have been successfully registered.");
+  } else {
+    submitState.value = "error";
+    notify.danger("Registration Failed", "An error occured while creating your account.");
+  }
 };
 </script>
 
